@@ -10,7 +10,7 @@ deploy:
   provider: pypi
   user: mtik00
 
-install: pip install -U tox-travis flake8
+install: pip install -U tox-travis
 
 language: python
 
@@ -21,7 +21,11 @@ python:
     - 2.7
     - 2.6
 
-before_script:
-    "flake8 yamicache"
+# We only need to run flake8 on 2.7
+matrix:
+    include:
+        - python: '2.7'
+          before_script:
+            "flake8 yamicache"
 
 script: tox
