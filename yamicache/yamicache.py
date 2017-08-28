@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 '''
-yamicache : Yet another in-memory cache module ('yami' sounds better to me than 'yaim')
+yamicache : Yet another in-memory cache module ('yami' sounds better to me than
+'yaim')
 
 This module provides a simple in-memory interface for caching results from
 function calls.
@@ -92,8 +93,8 @@ class Cache(collections.MutableMapping):
         is > 0 (``ValueError`` is raised otherwise).
     '''
     def __init__(
-        self, hashing=True, key_join='|', debug=False, prefix=None, quiet=False,
-        default_timeout=0, gc_thread_wait=None
+        self, hashing=True, key_join='|', debug=False, prefix=None,
+        quiet=False, default_timeout=0, gc_thread_wait=None
     ):
         self._prefix = prefix or ''
         self._hashing = hashing
