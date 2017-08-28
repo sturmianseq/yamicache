@@ -9,12 +9,19 @@ deploy:
     secure: gAQUpDmbpxZAkLxRpyrdaVwTp1djceufHTuEQb9BWbtgD+mSzJQVHxHaTMPGiVSPnEIlp2qlLYtSzqlGQYbW5St+2mmTG8EBvI/+t/Iq0pXFDrhWADIUcPdkV6E14ml422lI34U9ZfDzCDhYiE4UYnQ5AlX500rgqUy9H9niVjgkkWgFeC4ENc/wy9jdR9JYxNBKibizP5x1hyYURTB0e9KfaSvdtsnOccEncj5VNBvLdK42HJ7rd8XvwH6Tl6dqtie0pW287qnx+aJkwvKEQJtnsADVeSxj0uazAyu/mExLwCAzNREgSAfrKuXtI78uZlIoSlNl4b4TkBJV+e6YI6rGTSfh0kQ3Ca6pjHZl6eqQRekcCcM6UkxziV32nNGW3pz+FiHqbTMlwQKaQ7Wi3heiDxcc2eyjENTuVAmrow2w8YdMudfbRVYsCI9z+Xeu9NWuXfk0s/Sn03/CH+h9qm0+PGM6eQPLF9SY3JeyD1zjz6JTEpLQvuG3YYLZdPdi58VgQKE2ua+iqJKqh64KhT+YcXyfZm7NGZnsO42HdsojlmpaD1hpV3RQhVEB6DFlrplJC4I1f7+Af4ggUGqbOOcCyjg227GJIFXXyiqSH6qt76AquePrbpDnPO6OXi3ydUHDp7QBrEnDTNzNZM7ELrzov0+ead+fhO+J2YTbakA=
   provider: pypi
   user: mtik00
-install: pip install -U tox-travis
+
+install: pip install -U tox-travis flake8
+
 language: python
+
 python:
-- 3.5
-- 3.4
-- 3.3
-- 2.7
-- 2.6
+    - 3.5
+    - 3.4
+    - 3.3
+    - 2.7
+    - 2.6
+
+before_script:
+    "flake8 yamicache"
+
 script: tox
