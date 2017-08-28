@@ -25,7 +25,7 @@ python:
 matrix:
     include:
         - python: '2.7'
-          before_script:
-            "flake8 yamicache"
+          install: "pip install flake8"
+          before_script: "flake8 yamicache"
 
 script: tox
