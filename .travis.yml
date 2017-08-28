@@ -15,6 +15,7 @@ install: pip install -U tox-travis
 language: python
 
 python:
+    - 3.6
     - 3.5
     - 3.4
     - 3.3
@@ -26,6 +27,6 @@ matrix:
     include:
         - python: '2.7'
           install: "pip install flake8"
-          before_script: "flake8 yamicache"
+          script: "flake8 yamicache"
 
 script: tox
