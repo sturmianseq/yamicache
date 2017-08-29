@@ -5,13 +5,19 @@ yamicache
 
 .. image:: https://img.shields.io/pypi/v/yamicache.svg
         :target: https://pypi.python.org/pypi/yamicache
+        :alt: Pypi Version
 
 .. image:: https://img.shields.io/travis/mtik00/yamicache.svg
         :target: https://travis-ci.org/mtik00/yamicache
+        :alt: Travis Status
 
 .. image:: https://readthedocs.org/projects/yamicache/badge/?version=latest
         :target: https://yamicache.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
+
+.. image:: https://coveralls.io/repos/github/mtik00/yamicache/badge.svg?branch=master
+        :target: https://coveralls.io/github/mtik00/yamicache?branch=master
+        :alt: Coveralls Status
 
 
 Yet another in-memory caching package

@@ -1,4 +1,4 @@
-install: pip install -U tox-travis coveralls
+install: pip install -U coveralls
 
 language: python
 
@@ -19,9 +19,10 @@ matrix:
           script: "flake8 --ignore=E501 yamicache"
 
 script:
-    - tox
-    - coverage run -m py.test
+    - coverage run --source="yamicache" -p -m py.test
+    - coverage combine
     - coverage report -m
+
 
 after_success:
     - coveralls
