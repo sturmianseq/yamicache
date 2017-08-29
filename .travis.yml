@@ -1,4 +1,4 @@
-install: pip install -U coveralls
+install: pip install -U coveralls .
 
 language: python
 
