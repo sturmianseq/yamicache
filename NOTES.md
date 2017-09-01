@@ -8,7 +8,9 @@
 1.  bump the version: `bumpversion --help` (e.g. `bumpversion minor`)  
     this will also create the tag
 1.  modify the release notes
-1.  push the new version & release notes (you can add `[skip ci]` for this one)
+1.  push the new version & release notes (you can add `[skip ci]` for this one)  
+    **NOTE**: push this with `git push --tags` to update to the new tag created
+    by `bumpversion`.
 1.  build the packages: `python setup.py sdist bdist_wheel`
 1.  upload to pypi: `twine upload dist/*`
 
