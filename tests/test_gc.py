@@ -47,7 +47,7 @@ def test_deco_timeout(cache_obj):
     # should really be waiting is 2.5 (ish).  The mininum is 2-ish.
     time_diff = tend - tstart
     print('actual time: %s' % time_diff)
-    assert 1.5 < time_diff < 2.7
+    assert 1.5 < time_diff < 3
 
 
 def test_gc(cache_obj):
