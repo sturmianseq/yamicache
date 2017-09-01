@@ -22,6 +22,33 @@ class MyApp(object):
         '''running test1'''
         return argument ** power
 
+    @c.cached(timeout=2)
+    def test2(self):
+        '''running test2'''
+        return 3
+
+
+def test_deco_timeout(cache_obj):
+    '''Test custom decorator timeout'''
+    c.clear()
+
+    # Cache the result, which should use a 2s timeout, as opposed to the
+    # default of 1s.
+    tstart = time.time()
+    cache_obj.test2()
+
+    # Wait up to 5s for the GC thread to clear `test2()`.
+    while len(c) and ((time.time() - tstart) < 5):
+        time.sleep(0.1)  # Give GC a chance to run
+
+    tend = time.time()
+
+    # The defined timeout is 2, and gc_thread_wait is 0.5, so the max we
+    # should really be waiting is 2.5 (ish).  The mininum is 2-ish.
+    time_diff = tend - tstart
+    print('actual time: %s' % time_diff)
+    assert 1.5 < time_diff < 2.7
+
 
 def test_gc(cache_obj):
     for _ in range(10):
@@ -69,7 +96,7 @@ def test_gc2(cache_obj):
 
 
 def main():
-    test_gc2(MyApp())
+    test_deco_timeout(MyApp())
 
 
 if __name__ == '__main__':
