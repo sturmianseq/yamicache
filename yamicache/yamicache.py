@@ -25,13 +25,13 @@ __all__ = ['Cache', 'nocache', 'override_timeout']
 
 @contextlib.contextmanager
 def override_timeout(cache_obj, timeout):
-    old = cache_obj._default_timeout
-    cache_obj._default_timeout = timeout
+    old = cache_obj._override_timeout
+    cache_obj._override_timeout = timeout
 
     try:
         yield
     finally:
-        cache_obj._default_timeout = old
+        cache_obj._override_timeout = old
 
 
 @contextlib.contextmanager
@@ -109,6 +109,13 @@ class Cache(collections.MutableMapping):
         self._do_gc_thread = False
         self._gc_lock = Lock()
         self.counters = {}  # Only enabled with ``debug``
+
+        # Force all calls to use this value instead of default, or what was
+        # used during decorator creation.
+        self._override_timeout = None
+
+        if default_timeout and not isinstance(default_timeout, int):
+            raise ValueError("Default timeout can only be `int`")
 
         if self._gc_thread_wait:
             self._do_gc_thread = True
@@ -255,18 +262,28 @@ class Cache(collections.MutableMapping):
         '''
         A decorator used to memoize the return of a function call.
         '''
-        def real_decorator(function):
+        if timeout and not isinstance(timeout, int):
+            raise ValueError("timeout can only be `int`")
+
+        def real_decorator(function, timeout=timeout):
+            function.__cached_timeout__ = timeout or self._default_timeout
 
             @wraps(function)
             def wrapper(*args, **kwargs):
                 # Check the timeout here, since this is the call and not the
                 # instantiation.
-                timeout = self._default_timeout
+                # timeout = self._default_timeout
 
                 if not self._cache:
                     return function(*args, **kwargs)
 
                 cache_key = self._calculate_key(function, key, *args, **kwargs)
+
+                # Let `override_timeout` do its thing
+                if self._override_timeout is not None:
+                    timeout = self._override_timeout
+                else:
+                    timeout = function.__cached_timeout__
 
                 try:
                     if cache_key in self:

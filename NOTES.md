@@ -11,3 +11,7 @@
 1.  wait for Travis to show passing
 1.  build the packages: `python setup.py sdist bdist_wheel`
 1.  upload to pypi: `twine upload dist/*`
+
+## Coverage testing
+
+    coverage run --source=yamicache -p -m py.test && coverage combine && coverage report -m
