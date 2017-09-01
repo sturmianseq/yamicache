@@ -3,4 +3,4 @@
 """Top-level package for yamicache."""
 
 __author__ = """Timothy McFadden"""
-__version__ = '0.1.0'
+__version__ = '0.1.1'
