@@ -272,7 +272,6 @@ class Cache(collections.MutableMapping):
             def wrapper(*args, **kwargs):
                 # Check the timeout here, since this is the call and not the
                 # instantiation.
-                # timeout = self._default_timeout
 
                 if not self._cache:
                     return function(*args, **kwargs)
