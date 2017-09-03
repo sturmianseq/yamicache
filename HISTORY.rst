@@ -2,7 +2,7 @@
 History
 =======
 
-x.x.x (YYYY-MM-DD)
+0.2.0 (2017-09-03)
 ------------------
 
 * Added cache key collision checking
