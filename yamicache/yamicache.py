@@ -179,6 +179,7 @@ class Cache(collections.MutableMapping):
         with self._gc_lock:
             return self._data_store.popitem()
     ###########################################################################
+
     def _is_key_initialized(self, key):
         with self._gc_lock:
             return self._data_store.get(key) is INIT_CACHE_VALUE
