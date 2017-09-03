@@ -66,6 +66,7 @@ def nocache(cache_obj):
 
 
 CachedItem = collections.namedtuple('CachedItem', 'value timeout time_added')
+INIT_CACHE_VALUE = CachedItem("<value not cached yet>", None, None)
 
 
 class Cache(collections.MutableMapping):
@@ -125,10 +126,13 @@ class Cache(collections.MutableMapping):
 
     # Default stuff to override MutableMapping ABC ############################
     def __len__(self):
-        return len(self._data_store)
+        return len([x for x, y in self.items() if y is not INIT_CACHE_VALUE])
 
     def __getitem__(self, key):
+        '''Only return the item if it's not the INIT value'''
         with self._gc_lock:
+            if (key not in self._data_store) or (self._data_store[key] is INIT_CACHE_VALUE):
+                raise KeyError(key)
             return self._data_store[key]
 
     def __setitem__(self, key, value):
@@ -176,6 +180,10 @@ class Cache(collections.MutableMapping):
             return self._data_store.popitem()
     ###########################################################################
 
+    def _is_key_initialized(self, key):
+        with self._gc_lock:
+            return self._data_store.get(key) is INIT_CACHE_VALUE
+
     def _from_timestamp(self, timestamp):
         '''Convert a timestamp string to an epoch value'''
         return time.mktime(time.strptime(timestamp))
@@ -205,6 +213,9 @@ class Cache(collections.MutableMapping):
         :param *args: Any ``*args`` used to call the function
         :param *kwargs: Any ``*kwargs`` used to call the function
         '''
+        if cached_key:
+            return cached_key
+
         key = cached_key
         if not key:
             key = dict(kwargs)
@@ -264,6 +275,15 @@ class Cache(collections.MutableMapping):
         '''
         if timeout and not isinstance(timeout, int):
             raise ValueError("timeout can only be `int`")
+        elif (key in self) or self._is_key_initialized(key):
+            # `key in self` will return False if the key either doesn't exist,
+            # or it's set to the INIT value.  Therefore, we need to call
+            # `_is_key_initialized()` to check that condition.
+            raise ValueError("cache key '%s' already exists" % key)
+        elif key:
+            # Set the default value so we can check for collisions when the
+            # next decorator is called.
+            self[key] = INIT_CACHE_VALUE
 
         def real_decorator(function, timeout=timeout):
             function.__cached_timeout__ = timeout or self._default_timeout
@@ -285,7 +305,7 @@ class Cache(collections.MutableMapping):
                     timeout = function.__cached_timeout__
 
                 try:
-                    if cache_key in self:
+                    if cache_key in self and (self[cache_key] is not INIT_CACHE_VALUE):
                         result = self[cache_key]
                         if (not result.timeout) or (result.timeout and (time.time() <= self._from_timestamp(result.timeout))):
                             self._debug_print('cache hit : %s' % cache_key)

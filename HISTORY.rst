@@ -2,6 +2,12 @@
 History
 =======
 
+x.x.x (YYYY-MM-DD)
+------------------
+
+* Added cache key collision checking
+
+
 0.1.1 (2017-09-01)
 ------------------
 

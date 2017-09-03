@@ -46,10 +46,12 @@ def test_cached(cache_obj):
         cache_obj.test1(8, 0)
 
     assert len(c) == 1
+    assert cache_obj.test1(8, 0) == 1
 
     for _ in range(10):
         cache_obj.test2()
 
+    assert cache_obj.test2() == 1
     assert len(c) == 2
 
     c.clear()
@@ -68,7 +70,7 @@ def test_keyed_cached(cache_obj):
     assert len(c) == 1
 
     key = list(c.keys())[0]
-    assert key.endswith('asdf')
+    assert key == 'asdf'
 
     c.clear()
     assert len(c) == 0
@@ -116,7 +118,7 @@ def test_counters(cache_obj):
         cache_obj.test3(8, 2)
 
     assert len(c.counters) == 1
-    assert c.counters['myapp|test3|asdf'] == 9
+    assert c.counters['asdf'] == 9
 
     print(c.dump())
     c.counters.clear()
