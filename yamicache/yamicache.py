@@ -269,6 +269,24 @@ class Cache(collections.MutableMapping):
             if key in self:
                 del self[key]
 
+    # Decorators ##############################################################
+    def clear_cache(self):
+        '''
+        A decorator used to clear the cache everytime the function is called.
+
+        For example, let's say you have a "discovery" function that stores
+        data read by other functions, and those function use caching.  You want
+        to use ``@c.clear_cache()`` for your main function so you don't have
+        to worry about cache being stale.
+        '''
+        def real_decorator(function):
+            @wraps(function)
+            def wrapper(*args, **kwargs):
+                self.clear()
+                return function(*args, **kwargs)
+            return wrapper
+        return real_decorator
+
     def cached(self, key=None, timeout=None):
         '''
         A decorator used to memoize the return of a function call.

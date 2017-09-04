@@ -22,7 +22,7 @@ class App2(object):
         return argument ** power
 
 
-def test_avoide_collision():
+def test_avoid_collision():
     '''Make sure cache keys don't collide'''
     a1 = App1()
     a2 = App2()

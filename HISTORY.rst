@@ -2,6 +2,12 @@
 History
 =======
 
+x.x.x (YYY-MM-DD)
+------------------
+
+* Added ``@clear_cache()`` decorator
+
+
 0.2.0 (2017-09-03)
 ------------------
 
