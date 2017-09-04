@@ -42,16 +42,19 @@ Quick Start
 
 .. code-block:: python
 
+    from __future__ import print_function
+    import time
     from yamicache.yamicache import Cache
     c = Cache()
     class MyApp(object):
-        @c.cached()
-        def long_op(self):
+    @c.cached()
+    def long_op(self):
             time.sleep(30)
             return 1
-    
+
     app = MyApp()
+    t_start = time.time()
     assert app.long_op() == 1  # takes 30s
     assert app.long_op() == 1  # takes 0s
     assert app.long_op() == 1  # takes 0s
-
+    assert 1 < (time.time() - t_start) < 31
