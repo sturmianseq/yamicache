@@ -45,9 +45,11 @@ def test_deco_timeout(cache_obj):
 
     # The defined timeout is 2, and gc_thread_wait is 0.5, so the max we
     # should really be waiting is 2.5 (ish).  The mininum is 2-ish.
+    # NOTE: I've had a hell of time with duration variance on Travis-CI, which
+    # is why the range is so big.
     time_diff = tend - tstart
     print('actual time: %s' % time_diff)
-    assert 1.5 < time_diff < 3
+    assert 1.5 < time_diff < 3.5
 
 
 def test_gc(cache_obj):
