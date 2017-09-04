@@ -36,11 +36,22 @@ Features
 * Optional garbage collection thread
 * Optional time-based cache expiration
 
-Credits
----------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+Quick Start
+-----------
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+.. code-block:: python
+
+    from yamicache.yamicache import Cache
+    c = Cache()
+    class MyApp(object):
+        @c.cached()
+        def long_op(self):
+            time.sleep(30)
+            return 1
+    
+    app = MyApp()
+    assert app.long_op() == 1  # takes 30s
+    assert app.long_op() == 1  # takes 0s
+    assert app.long_op() == 1  # takes 0s
 
