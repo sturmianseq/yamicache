@@ -47,10 +47,10 @@ Quick Start
     from yamicache.yamicache import Cache
     c = Cache()
     class MyApp(object):
-    @c.cached()
-    def long_op(self):
-            time.sleep(30)
-            return 1
+        @c.cached()
+        def long_op(self):
+                time.sleep(30)
+                return 1
 
     app = MyApp()
     t_start = time.time()
