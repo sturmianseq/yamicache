@@ -1,12 +1,12 @@
 bumpversion==0.5.3
 click==6.7
-coverage==4.1
-cryptography==1.7
-flake8==2.6.0
+coverage==4.4.1
+cryptography==2.0.3
+flake8==3.4.1
 pip>=9
 pytest-runner==2.11.1
-pytest==2.9.2
-PyYAML==3.11
+pytest==3.2.1
+PyYAML==3.12
 Sphinx==1.6.3
 twine==1.9.1
 watchdog==0.8.3
