@@ -7,7 +7,7 @@ pip>=9
 pytest-runner==2.11.1
 pytest==2.9.2
 PyYAML==3.11
-Sphinx==1.4.8
+Sphinx==1.6.3
 twine==1.9.1
 watchdog==0.8.3
 wheel==0.29.0
