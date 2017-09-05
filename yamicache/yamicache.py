@@ -25,13 +25,13 @@ __all__ = ['Cache', 'nocache', 'override_timeout']
 
 @contextlib.contextmanager
 def override_timeout(cache_obj, timeout):
-    old = cache_obj._override_timeout
     cache_obj._override_timeout = timeout
 
     try:
         yield
     finally:
-        cache_obj._override_timeout = old
+        # The value of ``None`` disable the override timeout mechanism
+        cache_obj._override_timeout = None
 
 
 @contextlib.contextmanager
@@ -154,28 +154,33 @@ class Cache(collections.MutableMapping):
 
     # Override some of the *normal* methods to include the lock ###############
     def clear(self):
-        '''Override `MutableMapping.clear()` to also clear `self.counters`'''
+        '''Clear the cache'''
         with self._gc_lock:
             self._data_store.clear()
             self.counters.clear()
 
     def keys(self):
+        '''Return a list of keys in the cache'''
         with self._gc_lock:
             return self._data_store.keys()
 
     def items(self):
+        '''Return all items in the cache as a list of ``tuple(key, value)``'''
         with self._gc_lock:
             return self._data_store.items()
 
     def values(self):
+        '''Return a list of cached values'''
         with self._gc_lock:
             return self._data_store.values()
 
     def pop(self, key):
+        '''Remove the cached value specified by ``key``'''
         with self._gc_lock:
             return self._data_store.pop(key)
 
     def popitem(self):
+        '''Remove a random item from the cache (only useful during testing)'''
         with self._gc_lock:
             return self._data_store.popitem()
     ###########################################################################
