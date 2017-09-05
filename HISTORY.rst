@@ -2,7 +2,7 @@
 History
 =======
 
-x.x.x (YYY-MM-DD)
+0.3.0 (2017-09-05)
 ------------------
 
 * Added ``@clear_cache()`` decorator

@@ -77,7 +77,7 @@ def build_dist():
     '''Build the distribution'''
     run_command(['rm', 'dist/*'])
     (text, returncode) = run_command([
-        'python', 'setup.py', 'sdist', 'bdist_wheel'])
+        'python', 'setup.py', 'sdist', '--formats=gztar', 'bdist_wheel'])
 
 
 def deploy():
