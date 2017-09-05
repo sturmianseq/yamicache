@@ -27,7 +27,7 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
-    zip_safe=False,
+    zip_safe=True,
     keywords='yamicache',
     classifiers=[
         'Development Status :: 3 - Alpha',
