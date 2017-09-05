@@ -1,5 +1,5 @@
 # pylint: skip-file
-from yamicache.yamicache import Cache
+from yamicache import Cache
 
 c = Cache()
 

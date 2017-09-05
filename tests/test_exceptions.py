@@ -1,5 +1,5 @@
 import pytest
-from yamicache.yamicache import Cache
+from yamicache import Cache
 
 
 def test_object_creation():

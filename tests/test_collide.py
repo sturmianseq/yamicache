@@ -1,6 +1,6 @@
 from __future__ import print_function
 import pytest
-from yamicache.yamicache import Cache
+from yamicache import Cache
 
 c = Cache(prefix='myapp', hashing=False, debug=False)
 

@@ -2,7 +2,7 @@ from __future__ import print_function
 import sys
 import time
 import pytest
-from yamicache.yamicache import Cache, override_timeout
+from yamicache import Cache, override_timeout
 
 if sys.version_info[0] == 2:
     range = xrange

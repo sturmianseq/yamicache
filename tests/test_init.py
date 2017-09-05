@@ -1,5 +1,6 @@
 from __future__ import print_function
-from yamicache.yamicache import Cache, INIT_CACHE_VALUE
+from yamicache import Cache
+from yamicache.yamicache import INIT_CACHE_VALUE
 
 c = Cache(hashing=False)
 

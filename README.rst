@@ -44,7 +44,7 @@ Quick Start
 
     from __future__ import print_function
     import time
-    from yamicache.yamicache import Cache
+    from yamicache import Cache
     c = Cache()
     class MyApp(object):
         @c.cached()

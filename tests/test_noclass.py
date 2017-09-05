@@ -3,7 +3,7 @@ Just a quick test to make sure there's no ``cls`` or ``self`` odness.
 '''
 from __future__ import print_function
 import sys
-from yamicache.yamicache import Cache
+from yamicache import Cache
 
 if sys.version_info[0] == 2:
     range = xrange

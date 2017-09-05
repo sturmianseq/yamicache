@@ -5,7 +5,7 @@ import pytest
 import random
 import threading
 from functools import partial
-from yamicache.yamicache import Cache
+from yamicache import Cache
 
 if sys.version_info[0] == 2:
     range = xrange

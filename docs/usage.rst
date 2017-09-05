@@ -6,7 +6,7 @@ To use yamicache in a project:
 
 .. code-block:: python
 
-    from yaimcache.yamicache import Cache
+    from yaimcache import Cache
 
     app_cache = Cache()
 
@@ -35,7 +35,7 @@ In order to enable caching, you must first create a ``Cache`` object:
 
 .. code-block:: python
 
-    from yamicache.yamicache import Cache
+    from yamicache import Cache
     c = Cache()
 
 The caching object has the following parameters available during object creation:
@@ -69,7 +69,7 @@ the function being called and the arguments being used.
     the same key will raise ``ValueError``.
 
 ``timeout``: You can use this parameter to override the default timeout value
-used by the ``yamicache.yamicache.Cache`` object.
+used by the ``yamicache.Cache`` object.
 
 
 `@Cache.clear_cache()`
@@ -94,7 +94,7 @@ cached decorator.  For example:
 
 .. code-block:: python
 
-    from yamicache.yamicache import Cache, override_timeout
+    from yamicache import Cache, override_timeout
     c = Cache()
 
     @c.cached(timeout=90)
@@ -112,7 +112,7 @@ modified when this context manager is used.  For example:
 
 .. code-block:: python
 
-    from yamicache.yamicache import Cache, nocache
+    from yamicache import Cache, nocache
     c = Cache()
 
     @c.cached(key='test')
