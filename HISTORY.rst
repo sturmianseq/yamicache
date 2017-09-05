@@ -6,6 +6,7 @@ x.x.x (YYY-MM-DD)
 ------------------
 
 * Added ``@clear_cache()`` decorator
+* Added imports to allow for ``from yamicache import Cache``
 
 
 0.2.0 (2017-09-03)
