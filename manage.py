@@ -9,10 +9,13 @@ import os
 import re
 import click
 import requests
-import subprocess
-import SocketServer
-import SimpleHTTPServer
+# import subprocess
+# import SocketServer
+# import SimpleHTTPServer
 from pkg_resources import parse_version
+from __manage import run_command
+from __manage.docs import serve_docs, build_docs, clean_docs
+from __manage.version import show_versions, rev_version
 
 
 # Metadata ####################################################################
@@ -22,30 +25,6 @@ __license__ = 'MIT'
 
 
 # Globals #####################################################################
-def run_command(*args, **kwargs):
-    '''
-    Wrapper around `check_output` that will always return the text and
-    return code, without raising an exception.
-    '''
-
-    if 'stderr' in kwargs:
-        kwargs.pop('stderr')
-
-    if ('stderr' not in kwargs):
-        kwargs['stderr'] = subprocess.STDOUT
-
-    if ('shell' not in kwargs) and isinstance(args[0], basestring):
-        kwargs['shell'] = True
-
-    try:
-        text = subprocess.check_output(*args, **kwargs)
-        returncode = 0
-    except subprocess.CalledProcessError as e:
-        text = e.output
-        returncode = e.returncode
-
-    return (text, returncode)
-
 
 def install():
     '''Install this package'''
@@ -88,24 +67,6 @@ def clean_all():
     clean_docs()
 
 
-def show_version():
-    with open('yamicache/__init__.py') as fh:
-        text = fh.read()
-
-    match = re.search(
-        '__version__\s+=\s+["\'](?P<version>[\d\.a-z]+)["\']', text)
-    if match:
-        click.echo('current source version: %s' % match.group('version'))
-
-    (text, returncode) = run_command([
-        'git', 'tag', '-l', '--sort=-version:refname'])
-    if text:
-        latest = text.split()[0]
-        click.echo('current tag: %s' % latest)
-    else:
-        click.echo('no tags found')
-
-
 def build_all():
     '''Build the distribution & docs'''
     build_dist()
@@ -117,32 +78,6 @@ def build_dist():
     run_command(['rm', 'dist/*'])
     (text, returncode) = run_command([
         'python', 'setup.py', 'sdist', 'bdist_wheel'])
-
-
-def build_docs():
-    '''Build HTML documentation'''
-    clean_docs()
-    click.echo(run_command(['sphinx-apidoc', '-o', 'docs/', 'yamicache'])[0])
-    click.echo(
-        run_command(['make', 'html'], cwd='docs')[0]
-    )
-
-
-def serve_docs():
-    '''Serve the HTML docs'''
-    os.chdir('docs/_build/html')
-    Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-    httpd = SocketServer.TCPServer(("", 8000), Handler)
-
-    click.echo("serving at http://127.0.0.1:8000")
-    httpd.serve_forever()
-
-
-def clean_docs():
-    '''Clean the HTML documentation'''
-    run_command(['rm', '-rf', 'docs/_build/*'])
-    run_command(['rm', 'docs/yamicache.rst'])
-    run_command(['rm', 'docs/modules.rst'])
 
 
 def deploy():
@@ -196,19 +131,20 @@ def deploy():
 
 
 # Create the CLI ##############################################################
-def add_command(name, f, group, description=None):
+def add_command(name, f, group, description=None, params=None):
     group.add_command(click.Command(
-        name, callback=f, help=description or f.__doc__))
+        name, callback=f, help=description or f.__doc__, params=params))
 
 
 cli = click.Group()
+cli.params.append(click.Option(('--dry-run',), is_flag=True, help="Don't actually execute anything"))
 add_command('lint', lint, cli)
 add_command('deploy', deploy, cli)
 add_command('install', install, cli)
 add_command('uninstall', uninstall, cli)
 
 show_group = click.Group('show', help='Display project info')
-add_command('version', show_version, show_group)
+add_command('version', show_versions, show_group)
 cli.add_command(show_group)
 
 build_group = click.Group('build', help='Build artifacts')
@@ -225,9 +161,14 @@ cli.add_command(clean_group)
 
 docs_group = click.Group('docs', help="HTML Documentation")
 add_command('build', build_docs, docs_group)
-add_command('docs', clean_docs, docs_group)
 add_command('serve', serve_docs, docs_group)
+add_command('clean', clean_docs, docs_group)
 cli.add_command(docs_group)
+
+ver_group = click.Group('ver', help="Version control")
+add_command('show', show_versions, ver_group)
+add_command('rev', rev_version, ver_group)
+cli.add_command(ver_group)
 ###############################################################################
 
 
