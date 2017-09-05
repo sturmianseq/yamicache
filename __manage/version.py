@@ -69,21 +69,10 @@ def rev_version():
         new_ver = click.prompt('Enter new version: ')
         value = click.prompt('New version is [%s].  OK?' % new_ver)
 
-    do_commit = to_bool(click.prompt('Commit the change? '))
-    do_tag = False
-    do_push = False
-
-    if do_commit:
-        do_tag = to_bool(click.prompt('Create tag "v%s"? ' % new_ver))
-        do_push = to_bool(click.prompt('Push the new version files? '))
-
     dry_run = is_dry_run()
     click.echo("dry run: %s" % dry_run)
     click.echo("old ver: %s" % old_version)
     click.echo("new ver: %s" % new_ver)
-    click.echo(" commit: %s" % ('yes' if do_commit else 'no'))
-    click.echo("    tag: %s" % ('yes' if do_tag else 'no'))
-    click.echo("   push: %s" % ('yes' if do_push else 'no'))
     click.confirm("OK to continue?", abort=True)
 
     files_modified = []
@@ -104,15 +93,26 @@ def rev_version():
         else:
             click.echo('ERROR: Cant find match [%s] in [%s]' % (version.find, fpath))
 
-    if do_commit:
-        for fpath in files_modified:
-            run_command(['git', 'add', fpath])
+    return files_modified
 
-        message = REV_COMMIT_MESSAGE.format(old=old_version, new=new_ver)
-        run_command(['git', 'commit', '-m"%s"' % message])
 
-        if do_tag:
-            run_command(['git', 'tag', '-a', 'v%s' % new_ver, '-m"version %s"' % new_ver])
+def tag_version():
+    '''Tag this version'''
+    current_version = get_versions().values()[0]
+    new_tag = 'v%s' % current_version
 
-        if do_push:
-            run_command(['git', 'push', '--follow-tags'])
+    (text, returncode) = run_command(['git', 'tag', '-l', '--sort=-v:refname'])
+    latest_tag = text.splitlines()[0]
+
+    if latest_tag == new_tag:
+        click.echo('ERROR: Tag "%s" already exists' % new_tag)
+        raise click.Abort()
+
+    click.echo('current version: %s' % current_version)
+    click.echo('     latest tag: %s' % latest_tag)
+    click.echo('        new tag: %s' % new_tag)
+
+    click.confirm('OK to continue with tag creation?', abort=True)
+
+    run_command(['git', 'tag', '-a', new_tag, '-m', '"version %s"' % new_tag])
+    run_command(['git', 'push', '--follow-tags'])

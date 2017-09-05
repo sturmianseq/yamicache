@@ -15,7 +15,7 @@ import requests
 from pkg_resources import parse_version
 from __manage import run_command
 from __manage.docs import serve_docs, build_docs, clean_docs
-from __manage.version import show_versions, rev_version
+from __manage.version import show_versions, rev_version, tag_version
 
 
 # Metadata ####################################################################
@@ -168,6 +168,7 @@ cli.add_command(docs_group)
 ver_group = click.Group('ver', help="Version control")
 add_command('show', show_versions, ver_group)
 add_command('rev', rev_version, ver_group)
+add_command('tag', tag_version, ver_group)
 cli.add_command(ver_group)
 ###############################################################################
 

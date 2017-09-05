@@ -21,7 +21,7 @@ def run_command(*args, **kwargs):
     if is_dry_run():
         cmd = '`' + ' '.join(*args) + '`, ' + ' '.join(['%s=%s' % (key, value) for (key, value) in kwargs.items()])
         click.echo('...would have ran: %s' % cmd)
-        return ('', 0)
+        return ('--dry-run', 0)
 
     if 'stderr' in kwargs:
         kwargs.pop('stderr')
