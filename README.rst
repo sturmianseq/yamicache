@@ -4,7 +4,7 @@ yamicache
 
 
 .. image:: https://img.shields.io/pypi/v/yamicache.svg
-        :target: https://pypi.python.org/pypi/yamicache
+        :target: https://pypi.org/project/yamicache/
         :alt: Pypi Version
 
 .. image:: https://img.shields.io/travis/mtik00/yamicache.svg
