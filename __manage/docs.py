@@ -13,7 +13,6 @@ from watchdog.events import PatternMatchingEventHandler
 from . import run_command, absjoin
 
 
-MAKE_API = ['sphinx-apidoc', '-o', '.', '..\\yamicache', '--force']
 MAKE_COMMAND = ['make', 'html']
 
 
@@ -36,8 +35,6 @@ class SphinxEventHandler(PatternMatchingEventHandler):
         self.driver.quit()
 
     def _run(self):
-        print('creating API docs')
-        subprocess.call(MAKE_API)
         print('creating HTML docs')
         subprocess.call(MAKE_COMMAND)
         self.driver.refresh()
@@ -83,7 +80,6 @@ def clean_docs():
 def build_docs():
     '''Build HTML documentation'''
     clean_docs()
-    click.echo(run_command(['sphinx-apidoc', '-o', 'docs/', 'yamicache'])[0])
     click.echo(
         run_command(['make', 'html'], cwd='docs')[0]
     )

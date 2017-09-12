@@ -33,6 +33,9 @@ sys.path.insert(0, project_root)
 
 import yamicache
 
+# Generate the automatic lib documentation
+os.system("sphinx-apidoc -o . ../yamicache")
+
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
