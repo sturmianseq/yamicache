@@ -2,7 +2,7 @@
 History
 =======
 
-0.x.x (2017-xx-xx)
+0.4.0 (2017-10-09)
 ------------------
 
 * Added ``serialize()`` and ``deserialize()``
