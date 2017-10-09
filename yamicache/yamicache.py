@@ -379,5 +379,5 @@ class Cache(collections.MutableMapping):
         '''
         Read the serialized cache data from a file.
         '''
-        with open(filename) as fh:
+        with open(filename, 'rb') as fh:
             self._data_store = pickle.load(fh)
