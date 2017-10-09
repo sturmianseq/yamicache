@@ -17,6 +17,10 @@ import collections
 from hashlib import sha224
 from functools import wraps
 from threading import Lock, Thread
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 
 # Globals #####################################################################
@@ -205,7 +209,7 @@ class Cache(collections.MutableMapping):
             print(*args)
 
     def dump(self):
-        '''Dump the entire cache as a JSON object'''
+        '''Dump the entire cache as a JSON string'''
         return json.dumps(self._data_store, indent=4, separators=(',', ': '))
 
     def _calculate_key(self, func, cached_key=None, *args, **kwargs):
@@ -361,3 +365,19 @@ class Cache(collections.MutableMapping):
             return wrapper
 
         return real_decorator
+
+    def serialize(self, filename):
+        '''
+        Serialize the cache to a filename.  This process uses ``pickle``; Do
+        not use this function if you are caching something that is not
+        picklable!
+        '''
+        with open(filename, 'wb') as fh:
+            pickle.dump(self._data_store, fh, -1)
+
+    def deserialize(self, filename):
+        '''
+        Read the serialized cache data from a file.
+        '''
+        with open(filename, 'rb') as fh:
+            self._data_store = pickle.load(fh)
