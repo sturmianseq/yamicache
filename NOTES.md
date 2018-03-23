@@ -3,7 +3,7 @@
 ## Deploying
 
 1.  Make sure all tests pass:  
-`flake8 --ignore=E501 yamicache && coverage run --source=yamicache -p -m py.test && coverage combine && coverage report -m`
+`python -m flake8 --ignore=E501 yamicache && coverage run --source=yamicache -p -m py.test && coverage combine && coverage report -m`
 1.  push to GitHub
 1.  wait for Travis to show passing
 1.  bump the version: `python manage.py ver rev`

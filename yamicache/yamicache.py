@@ -345,7 +345,7 @@ class Cache(collections.MutableMapping):
                                 timeout=self._to_timestamp(time.time() + timeout) if timeout else 0,
                                 time_added=self._to_timestamp())
                             self[cache_key] = result
-                            return self[cache_key]
+                            return self[cache_key].value
                 except KeyError:  # pragma: nocover
                     # Workaround for threading issues, as opposed to a potential
                     # lock block.  A thread may have deleted this key, and

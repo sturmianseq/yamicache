@@ -2,6 +2,12 @@
 History
 =======
 
+0.5.0 (2018-03-23)
+------------------
+
+* Fix #7: Timed-out values are not returned when refreshed
+
+
 0.4.0 (2017-10-09)
 ------------------
 
