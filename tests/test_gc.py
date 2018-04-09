@@ -49,7 +49,7 @@ def test_deco_timeout(cache_obj):
     # is why the range is so big.
     time_diff = tend - tstart
     print('actual time: %s' % time_diff)
-    assert 1.5 < time_diff < 3.5
+    assert 1.4 < time_diff < 3.5
 
 
 def test_gc(cache_obj):
