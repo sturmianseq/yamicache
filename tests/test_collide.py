@@ -4,6 +4,7 @@ from yamicache import Cache
 
 c = Cache(prefix='myapp', hashing=False, debug=False)
 
+
 class App1(object):
     @c.cached()
     def test1(self, argument, power):

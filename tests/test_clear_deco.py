@@ -3,6 +3,7 @@ from yamicache import Cache
 
 c = Cache()
 
+
 class App1(object):
     @c.cached()
     def test1(self, argument, power):

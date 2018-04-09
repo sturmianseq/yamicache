@@ -9,7 +9,7 @@ from yamicache import Cache
 try:
     import cPickle as pickle
 except ImportError:
-    import pickle
+    import pickle   # noqa: F401
 
 
 if sys.version_info[0] == 2:
