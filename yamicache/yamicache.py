@@ -12,6 +12,7 @@ function calls.
 from __future__ import print_function
 import json
 import time
+import inspect
 import contextlib
 import collections
 from hashlib import sha224
@@ -227,8 +228,27 @@ class Cache(collections.MutableMapping):
 
         key = cached_key
         if not key:
-            key = dict(kwargs)
+            key = {}
+            # We need to grab the default arguments.  `inspect.getargspec()`
+            # returns the function argument names, and any defaults.  The
+            # defaults are always the last args.  For example:
+            # `args=['arg1', 'arg2'], defaults=(4,)` means that `arg2` has a
+            # default of 4.
+            fargs, _, _, defaults = inspect.getargspec(func)
+
+            # Load the defaults first, since they may not be in the calling
+            # spec.
+            if defaults:
+                key = dict(zip(fargs[-len(defaults):], defaults))
+
+            # Now load in the arguments.
+            key.update(kwargs)
             key.update(dict(zip(func.__code__.co_varnames, args)))
+
+            # This next issue is that Python may re-order the keys when we go
+            # to repr them.  This will cause invalid cache misses.  We can fix
+            # this by recreating a dictionary with a 'known' algorithm.
+            key = repr(dict(sorted(key.items())))
 
         return "{prefix}{name}{join}{formatted_key}".format(
             join=self._key_join,
