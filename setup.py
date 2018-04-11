@@ -17,7 +17,7 @@ test_requirements = ['pytest']
 
 setup(
     name='yamicache',
-    version='0.5.0',
+    version='0.5.1',
     description="Yet another in-memory caching package",
     long_description=readme + '\n\n' + history,
     author="Timothy McFadden",

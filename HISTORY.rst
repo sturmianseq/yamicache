@@ -2,6 +2,13 @@
 History
 =======
 
+0.5.1 (2018-04-10)
+------------------
+
+* Fix #8: Function default arguments were not handled.  There was also a
+  potential cache miss if Python changed the order of `dict` keys.
+
+
 0.5.0 (2018-03-23)
 ------------------
 
