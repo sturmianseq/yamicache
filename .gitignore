@@ -1,5 +1,9 @@
 /instance
 
+# Ignoring pipenv files for now
+Pipfile
+Pipfile.lock
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
