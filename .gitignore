@@ -1,3 +1,5 @@
+/instance
+
 # Ignoring pipenv files for now
 Pipfile
 Pipfile.lock
