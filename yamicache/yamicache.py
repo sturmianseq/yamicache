@@ -288,8 +288,8 @@ class Cache(collections.MutableMapping):
         remove_keys = []
         for key, item in self.items():
             if (
-                (item.timeout and (time.time() > self._from_timestamp(item.timeout)))
-                or (since and (self._from_timestamp(item.time_added) > since))
+                (item.timeout and (time.time() > self._from_timestamp(item.timeout))) or
+                (since and (self._from_timestamp(item.time_added) > since))
             ):
                 self._debug_print('collecting : %s' % key)
                 remove_keys.append(key)
