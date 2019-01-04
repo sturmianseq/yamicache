@@ -5,7 +5,7 @@ flake8==3.4.1
 pip>=9
 pytest-runner==2.11.1
 pytest==3.2.1
-PyYAML==3.12
+pyyaml ~> 4.2b1
 selenium==3.5.0
 Sphinx==1.6.3
 twine==1.9.1
