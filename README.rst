@@ -7,10 +7,6 @@ yamicache
         :target: https://pypi.org/project/yamicache/
         :alt: Pypi Version
 
-.. image:: https://img.shields.io/travis/mtik00/yamicache.svg
-        :target: https://travis-ci.org/mtik00/yamicache
-        :alt: Travis Status
-
 .. image:: https://readthedocs.org/projects/yamicache/badge/?version=latest
         :target: https://yamicache.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
