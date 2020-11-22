@@ -29,7 +29,7 @@ def run_command(*args, **kwargs):
     if ('stderr' not in kwargs):
         kwargs['stderr'] = subprocess.STDOUT
 
-    if ('shell' not in kwargs) and isinstance(args[0], basestring):
+    if ('shell' not in kwargs) and isinstance(args[0], str):
         kwargs['shell'] = True
 
     try:
@@ -49,4 +49,4 @@ def absjoin(*args):
 
 def to_bool(value):
     '''Try to convert the string to a boolean'''
-    return value.lower()[0] in ['y', 't', '1'] if isinstance(value, basestring) else bool(value)
+    return value.lower()[0] in ['y', 't', '1'] if isinstance(value, str) else bool(value)

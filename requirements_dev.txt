@@ -1,13 +1,13 @@
-click==6.7
-coverage==4.4.1
-cryptography>=2.3
-flake8==3.4.1
+click
+coverage
+cryptography
+flake8
 pip>=9
-pytest-runner==2.11.1
-pytest==3.2.1
-pyyaml ~> 4.2b1
-selenium==3.5.0
-Sphinx==1.6.3
-twine==1.9.1
-watchdog==0.8.3
-wheel==0.29.0
+pytest-runner
+pytest
+pyyaml
+selenium
+Sphinx
+twine
+watchdog
+wheel

@@ -6,7 +6,7 @@ import logging
 import subprocess
 import selenium.webdriver
 
-from urllib import pathname2url
+from urllib.request import pathname2url
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 

@@ -53,7 +53,7 @@ def show_versions():
 
 def rev_version():
     '''Update versions'''
-    old_version = get_versions().values()[0]
+    old_version = list(get_versions().values())[0]
     dry_run = is_dry_run()
 
     # Increase the minor part by 1
@@ -98,7 +98,7 @@ def rev_version():
 
 def tag_version():
     '''Tag this version'''
-    current_version = get_versions().values()[0]
+    current_version = list(get_versions().values())[0]
     new_tag = 'v%s' % current_version
 
     (text, returncode) = run_command(['git', 'tag', '-l', '--sort=-v:refname'])
