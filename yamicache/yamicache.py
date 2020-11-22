@@ -234,12 +234,12 @@ class Cache(collections.MutableMapping):
             # defaults are always the last args.  For example:
             # `args=['arg1', 'arg2'], defaults=(4,)` means that `arg2` has a
             # default of 4.
-            fargs, _, _, defaults = inspect.getargspec(func)
+            spec = inspect.getfullargspec(func)
 
             # Load the defaults first, since they may not be in the calling
             # spec.
-            if defaults:
-                key = dict(zip(fargs[-len(defaults):], defaults))
+            if spec.defaults:
+                key = dict(zip(spec.args[-len(spec.defaults):], spec.defaults))
 
             # Now load in the arguments.
             key.update(kwargs)
