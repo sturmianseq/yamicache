@@ -7,7 +7,7 @@ c = Cache()
 class App1(object):
     @c.cached()
     def test1(self, argument, power):
-        '''running test1'''
+        """running test1"""
         return argument ** power
 
     @c.clear_cache()
@@ -16,7 +16,7 @@ class App1(object):
 
 
 def test_clear():
-    '''Make sure cache gets cleared'''
+    """Make sure cache gets cleared"""
     a1 = App1()
 
     assert len(c) == 0
@@ -34,5 +34,5 @@ def main():
     test_clear()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

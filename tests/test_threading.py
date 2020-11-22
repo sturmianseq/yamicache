@@ -6,12 +6,7 @@ import random
 import threading
 from functools import partial
 from yamicache import Cache
-
-if sys.version_info[0] == 2:
-    range = xrange
-    from Queue import Queue, Empty
-else:
-    from queue import Queue, Empty
+from queue import Queue, Empty
 
 
 DEBUG_PRINT = False
@@ -32,7 +27,8 @@ def cache_obj():
 
 
 class ExcThread(threading.Thread):
-    '''This class is used to capture exceptions during the threaded run.'''
+    """This class is used to capture exceptions during the threaded run."""
+
     def __init__(self, bucket, target):
         threading.Thread.__init__(self, target=target)
         self.bucket = bucket
@@ -48,19 +44,19 @@ class ExcThread(threading.Thread):
 class MyApp(object):
     @c.cached()
     def test1(self, argument, power):
-        '''running test1'''
+        """running test1"""
         return argument ** power
 
 
 def _cache(cache_obj):
-    '''Cache the result of a function'''
+    """Cache the result of a function"""
     time.sleep(random.randint(0, 2))
     debug_print("caching")
     cache_obj.test1(3, 0)
 
 
 def _pop():
-    '''Pop a *random* item from cache'''
+    """Pop a *random* item from cache"""
     time.sleep(random.randint(0, 2))
     try:
         c.popitem()
@@ -71,7 +67,7 @@ def _pop():
 
 
 def _iter():
-    '''Iterate through the cached items using ``iter()``'''
+    """Iterate through the cached items using ``iter()``"""
     time.sleep(random.randint(0, 2))
     debug_print("iter")
     list(iter(c))
@@ -79,7 +75,7 @@ def _iter():
 
 
 def _items():
-    '''Iterate through the cahced items using ``items()``'''
+    """Iterate through the cahced items using ``items()``"""
     time.sleep(random.randint(0, 2))
     debug_print("items")
     c.items()
@@ -87,7 +83,7 @@ def _items():
 
 
 def _keys():
-    '''Iterate through the cached item keys'''
+    """Iterate through the cached item keys"""
     time.sleep(random.randint(0, 2))
     debug_print("keys")
     c.keys()
@@ -95,7 +91,7 @@ def _keys():
 
 
 def _values():
-    '''Iterate through the cached item values'''
+    """Iterate through the cached item values"""
     time.sleep(random.randint(0, 2))
     debug_print("values")
     c.values()
@@ -103,7 +99,7 @@ def _values():
 
 
 def _clear():
-    '''Clear the cache'''
+    """Clear the cache"""
     time.sleep(random.randint(0, 2))
     debug_print("clearing")
     c.clear()
@@ -111,7 +107,7 @@ def _clear():
 
 
 def _collect():
-    '''Manually GC the cache'''
+    """Manually GC the cache"""
     time.sleep(random.randint(0, 2))
     debug_print("collecting")
     c.collect()
@@ -119,7 +115,7 @@ def _collect():
 
 
 def test_multithreading(cache_obj):
-    '''Test for thread blocking on Lock()'''
+    """Test for thread blocking on Lock()"""
     threads = []
     counts = {}
     q = Queue()
@@ -171,5 +167,5 @@ def main():
     test_multithreading(MyApp())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

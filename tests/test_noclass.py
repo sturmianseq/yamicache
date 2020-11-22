@@ -1,29 +1,23 @@
-'''
+"""
 Just a quick test to make sure there's no ``cls`` or ``self`` odness.
-'''
+"""
 from __future__ import print_function
 import sys
 import time
 from yamicache import Cache
 
-if sys.version_info[0] == 2:
-    range = xrange
-
-c = Cache(prefix='myapp', hashing=False, debug=False)
+c = Cache(prefix="myapp", hashing=False, debug=False)
 
 
 @c.cached()
 def my_func(argument, power):
-    '''running my_func'''
+    """running my_func"""
     return argument ** power
 
 
 @c.cached()
 def return_list(index):
-    mylists = {
-        0: [1, 2, 3],
-        1: [4, 5, 6]
-    }
+    mylists = {0: [1, 2, 3], 1: [4, 5, 6]}
     return mylists[index]
 
 
@@ -37,7 +31,7 @@ def test_main():
 
 
 def test_lists():
-    '''Make sure lists are returned'''
+    """Make sure lists are returned"""
     assert return_list(0) == [1, 2, 3]
     assert return_list(0) == [1, 2, 3]
     assert return_list(1) == [4, 5, 6]
@@ -55,7 +49,7 @@ def return_object_list():
 
 
 def test_object_list():
-    '''Test a result with a timeout & objects are returned'''
+    """Test a result with a timeout & objects are returned"""
     result = return_object_list()
     assert result[0].number == 0
     assert result[1].number == 1
@@ -67,5 +61,5 @@ def test_object_list():
     assert result[2].number == 2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_main()

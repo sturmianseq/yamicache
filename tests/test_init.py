@@ -6,19 +6,19 @@ c = Cache(hashing=False)
 
 
 class MyApp(object):
-    @c.cached(key='test1')
+    @c.cached(key="test1")
     def test1(self, argument, power):
-        '''running test1'''
+        """running test1"""
         return argument ** power
 
-    @c.cached(key='test2')
+    @c.cached(key="test2")
     def test2(self):
-        '''running test2'''
+        """running test2"""
         return 1
 
-    @c.cached(key='test3')
+    @c.cached(key="test3")
     def test3(self, argument, power):
-        '''running test3'''
+        """running test3"""
         return argument ** power
 
 
@@ -35,14 +35,14 @@ def test_init_cache():
     assert len(c) == 2
 
     # test3 should be initialized, but not cached
-    assert c._data_store['test3'] == INIT_CACHE_VALUE
+    assert c._data_store["test3"] == INIT_CACHE_VALUE
     assert len(c._data_store) == 3
-    assert 'test3' not in c
+    assert "test3" not in c
 
 
 def main():
     test_init_cache()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

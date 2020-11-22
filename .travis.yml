@@ -3,19 +3,12 @@ install: pip install -U coveralls .
 language: python
 
 python:
+    - 3.8
+    - 3.7
     - 3.6
     - 3.5
     - 3.4
     - 3.3
-    - 2.7
-
-# We only need to run flake8 on 2.7
-matrix:
-    include:
-        - name: "2.7 flake8"
-          python: "2.7"
-          install: "pip install flake8"
-          script: "flake8 --ignore=E501,W503,W504 yamicache"
 
 script:
     - coverage run --source="yamicache" -p -m py.test

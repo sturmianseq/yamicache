@@ -4,10 +4,9 @@ import time
 import pytest
 from yamicache import Cache, override_timeout
 
-if sys.version_info[0] == 2:
-    range = xrange
-
-c = Cache(prefix='myapp', hashing=False, debug=False, default_timeout=1, gc_thread_wait=0.5)
+c = Cache(
+    prefix="myapp", hashing=False, debug=False, default_timeout=1, gc_thread_wait=0.5
+)
 
 
 @pytest.fixture
@@ -19,17 +18,17 @@ def cache_obj():
 class MyApp(object):
     @c.cached()
     def test1(self, argument, power):
-        '''running test1'''
+        """running test1"""
         return argument ** power
 
     @c.cached(timeout=2)
     def test2(self):
-        '''running test2'''
+        """running test2"""
         return 3
 
 
 def test_deco_timeout(cache_obj):
-    '''Test custom decorator timeout'''
+    """Test custom decorator timeout"""
     c.clear()
 
     # Cache the result, which should use a 2s timeout, as opposed to the
@@ -48,7 +47,7 @@ def test_deco_timeout(cache_obj):
     # NOTE: I've had a hell of time with duration variance on Travis-CI, which
     # is why the range is so big.
     time_diff = tend - tstart
-    print('actual time: %s' % time_diff)
+    print("actual time: %s" % time_diff)
     assert 1.4 < time_diff < 3.5
 
 
@@ -65,7 +64,7 @@ def test_gc(cache_obj):
 
 
 def test_gc2(cache_obj):
-    '''Make sure the GC doesn't constantly run'''
+    """Make sure the GC doesn't constantly run"""
     c.clear()
 
     with override_timeout(c, 3):
@@ -101,5 +100,5 @@ def main():
     test_deco_timeout(MyApp())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -9,33 +9,30 @@ from yamicache import Cache
 try:
     import cPickle as pickle
 except ImportError:
-    import pickle   # noqa: F401
+    import pickle  # noqa: F401
 
 
-if sys.version_info[0] == 2:
-    range = xrange
-
-c = Cache(prefix='myapp', hashing=False, debug=False)
+c = Cache(prefix="myapp", hashing=False, debug=False)
 
 
 class MyApp(object):
     @c.cached()
     def test1(self, argument, power):
-        '''running test1'''
+        """running test1"""
         return argument ** power
 
     @c.cached()
     def test2(self):
-        '''running test2'''
+        """running test2"""
         return 1
 
-    @c.cached(key='asdf')
+    @c.cached(key="asdf")
     def test3(self, argument, power):
-        '''running test3'''
+        """running test3"""
         return argument ** power
 
     def test4(self):
-        '''running test4'''
+        """running test4"""
         return 4
 
     @c.cached()
@@ -86,5 +83,5 @@ def main():
     test_serialization(MyApp())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

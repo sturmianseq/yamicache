@@ -4,30 +4,27 @@ import time
 import pytest
 from yamicache import Cache, nocache, override_timeout
 
-if sys.version_info[0] == 2:
-    range = xrange
-
-c = Cache(prefix='myapp', hashing=False, debug=False)
+c = Cache(prefix="myapp", hashing=False, debug=False)
 
 
 class MyApp(object):
     @c.cached()
     def test1(self, argument, power):
-        '''running test1'''
+        """running test1"""
         return argument ** power
 
     @c.cached()
     def test2(self):
-        '''running test2'''
+        """running test2"""
         return 1
 
-    @c.cached(key='asdf')
+    @c.cached(key="asdf")
     def test3(self, argument, power):
-        '''running test3'''
+        """running test3"""
         return argument ** power
 
     def test4(self):
-        '''running test4'''
+        """running test4"""
         return 4
 
     @c.cached()
@@ -58,7 +55,7 @@ def test_cached(cache_obj):
     assert len(c) == 0
 
     # Make sure the cached function is properly wrapped
-    assert cache_obj.test2.__doc__ == 'running test2'
+    assert cache_obj.test2.__doc__ == "running test2"
 
 
 def test_keyed_cached(cache_obj):
@@ -70,13 +67,13 @@ def test_keyed_cached(cache_obj):
     assert len(c) == 1
 
     key = list(c.keys())[0]
-    assert key == 'asdf'
+    assert key == "asdf"
 
     c.clear()
     assert len(c) == 0
 
     # Make sure the cached function is properly wrapped
-    assert cache_obj.test3.__doc__ == 'running test3'
+    assert cache_obj.test3.__doc__ == "running test3"
 
 
 def test_utility(cache_obj):
@@ -89,7 +86,7 @@ def test_utility(cache_obj):
 
     assert len(c) == 4
 
-    assert c.dump() != '{}'
+    assert c.dump() != "{}"
 
     key = list(c.keys())[0]
     c.pop(key)
@@ -107,7 +104,7 @@ def test_utility(cache_obj):
     assert not c.keys()
     assert not c.values()
     assert not len(c)
-    assert c.dump() == '{}'
+    assert c.dump() == "{}"
 
 
 def test_counters(cache_obj):
@@ -118,7 +115,7 @@ def test_counters(cache_obj):
         cache_obj.test3(8, 2)
 
     assert len(c.counters) == 1
-    assert c.counters['asdf'] == 9
+    assert c.counters["asdf"] == 9
 
     print(c.dump())
     c.counters.clear()
@@ -191,7 +188,7 @@ def test_prefix(cache_obj):
     c.clear()
     cache_obj.test1(8, 0)
     key = list(c.keys())[0]
-    assert key.startswith('myapp|')
+    assert key.startswith("myapp|")
 
 
 def main():
@@ -201,5 +198,5 @@ def main():
     test_timeout(MyApp())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

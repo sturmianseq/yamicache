@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
-'''
+"""
 yamicache : Yet another in-memory cache module ('yami' sounds better to me than
 'yaim')
 
 This module provides a simple in-memory interface for caching results from
 function calls.
-'''
+"""
 
 # Imports #####################################################################
 from __future__ import print_function
@@ -18,6 +18,7 @@ import collections
 from hashlib import sha224
 from functools import wraps
 from threading import Lock, Thread
+
 try:
     import cPickle as pickle
 except ImportError:
@@ -25,7 +26,7 @@ except ImportError:
 
 
 # Globals #####################################################################
-__all__ = ['Cache', 'nocache', 'override_timeout']
+__all__ = ["Cache", "nocache", "override_timeout"]
 
 
 @contextlib.contextmanager
@@ -41,7 +42,7 @@ def override_timeout(cache_obj, timeout):
 
 @contextlib.contextmanager
 def nocache(cache_obj):
-    '''
+    """
     Use this context manager to temporarily disable all caching for an
     object.
 
@@ -61,7 +62,7 @@ def nocache(cache_obj):
         {}
         >>>
 
-    '''
+    """
     cache_obj._cache = False
 
     try:
@@ -70,12 +71,12 @@ def nocache(cache_obj):
         cache_obj._cache = True
 
 
-CachedItem = collections.namedtuple('CachedItem', 'value timeout time_added')
+CachedItem = collections.namedtuple("CachedItem", "value timeout time_added")
 INIT_CACHE_VALUE = CachedItem("<value not cached yet>", None, None)
 
 
-class Cache(collections.MutableMapping):
-    '''
+class Cache(collections.abc.MutableMapping):
+    """
     A class for caching and retreiving returns from function calls.
 
     :param bool hashing: Whether or not to hash the function inputs when
@@ -97,12 +98,19 @@ class Cache(collections.MutableMapping):
         *garbage collection*.  The default, ``None``, will disable the garbage
         collection thread.  This parameter is only valid if ``default_timeout``
         is > 0 (``ValueError`` is raised otherwise).
-    '''
+    """
+
     def __init__(
-        self, hashing=True, key_join='|', debug=False, prefix=None,
-        quiet=False, default_timeout=0, gc_thread_wait=None
+        self,
+        hashing=True,
+        key_join="|",
+        debug=False,
+        prefix=None,
+        quiet=False,
+        default_timeout=0,
+        gc_thread_wait=None,
     ):
-        self._prefix = prefix or ''
+        self._prefix = prefix or ""
         self._hashing = hashing
         self._key_join = key_join
         self._debug = debug
@@ -134,9 +142,11 @@ class Cache(collections.MutableMapping):
         return len([x for x, y in self.items() if y is not INIT_CACHE_VALUE])
 
     def __getitem__(self, key):
-        '''Only return the item if it's not the INIT value'''
+        """Only return the item if it's not the INIT value"""
         with self._gc_lock:
-            if (key not in self._data_store) or (self._data_store[key] is INIT_CACHE_VALUE):
+            if (key not in self._data_store) or (
+                self._data_store[key] is INIT_CACHE_VALUE
+            ):
                 raise KeyError(key)
             return self._data_store[key]
 
@@ -149,45 +159,46 @@ class Cache(collections.MutableMapping):
             del self._data_store[key]
 
     def __iter__(self):
-        '''
+        """
         Override ``iter()``.  This can make things slow, but it's the only
         way to prevent the underlying object from changing during iteration.
-        '''
+        """
         with self._gc_lock:
             for x in self._data_store.keys():
                 yield x
 
     # Override some of the *normal* methods to include the lock ###############
     def clear(self):
-        '''Clear the cache'''
+        """Clear the cache"""
         with self._gc_lock:
             self._data_store.clear()
             self.counters.clear()
 
     def keys(self):
-        '''Return a list of keys in the cache'''
+        """Return a list of keys in the cache"""
         with self._gc_lock:
             return self._data_store.keys()
 
     def items(self):
-        '''Return all items in the cache as a list of ``tuple(key, value)``'''
+        """Return all items in the cache as a list of ``tuple(key, value)``"""
         with self._gc_lock:
             return self._data_store.items()
 
     def values(self):
-        '''Return a list of cached values'''
+        """Return a list of cached values"""
         with self._gc_lock:
             return self._data_store.values()
 
     def pop(self, key):
-        '''Remove the cached value specified by ``key``'''
+        """Remove the cached value specified by ``key``"""
         with self._gc_lock:
             return self._data_store.pop(key)
 
     def popitem(self):
-        '''Remove a random item from the cache (only useful during testing)'''
+        """Remove a random item from the cache (only useful during testing)"""
         with self._gc_lock:
             return self._data_store.popitem()
+
     ###########################################################################
 
     def _is_key_initialized(self, key):
@@ -195,11 +206,11 @@ class Cache(collections.MutableMapping):
             return self._data_store.get(key) is INIT_CACHE_VALUE
 
     def _from_timestamp(self, timestamp):
-        '''Convert a timestamp string to an epoch value'''
+        """Convert a timestamp string to an epoch value"""
         return time.mktime(time.strptime(timestamp))
 
     def _to_timestamp(self, epoch=None):
-        '''Convert an epoch value to a timestamp string'''
+        """Convert an epoch value to a timestamp string"""
         if epoch:
             return time.asctime(time.localtime(epoch))
 
@@ -210,11 +221,11 @@ class Cache(collections.MutableMapping):
             print(*args)
 
     def dump(self):
-        '''Dump the entire cache as a JSON string'''
-        return json.dumps(self._data_store, indent=4, separators=(',', ': '))
+        """Dump the entire cache as a JSON string"""
+        return json.dumps(self._data_store, indent=4, separators=(",", ": "))
 
     def _calculate_key(self, func, cached_key=None, *args, **kwargs):
-        '''
+        """
         Calculates the cache key based on the function, inputs, and object
         settings.
 
@@ -222,7 +233,7 @@ class Cache(collections.MutableMapping):
         :param str cached_key: The `keyed_cache`, if any
         :param *args: Any ``*args`` used to call the function
         :param *kwargs: Any ``*kwargs`` used to call the function
-        '''
+        """
         if cached_key:
             return cached_key
 
@@ -239,7 +250,7 @@ class Cache(collections.MutableMapping):
             # Load the defaults first, since they may not be in the calling
             # spec.
             if spec.defaults:
-                key = dict(zip(spec.args[-len(spec.defaults):], spec.defaults))
+                key = dict(zip(spec.args[-len(spec.defaults) :], spec.defaults))
 
             # Now load in the arguments.
             key.update(kwargs)
@@ -252,13 +263,15 @@ class Cache(collections.MutableMapping):
 
         return "{prefix}{name}{join}{formatted_key}".format(
             join=self._key_join,
-            prefix=(self._prefix + self._key_join) if self._prefix else '',
+            prefix=(self._prefix + self._key_join) if self._prefix else "",
             name=func.__name__,
-            formatted_key=sha224(str(key).encode('utf-8')).hexdigest() if self._hashing else str(key)
+            formatted_key=sha224(str(key).encode("utf-8")).hexdigest()
+            if self._hashing
+            else str(key),
         )
 
     def _update_counter(self, key):
-        '''Keeps track of cache hits'''
+        """Keeps track of cache hits"""
         if not self._debug:
             return
 
@@ -269,10 +282,10 @@ class Cache(collections.MutableMapping):
                 self.counters[key] = 1
 
     def _gc(self):
-        '''
+        """
         This is the garbage collection thread that periodically calls our
         collect method.
-        '''
+        """
         tnext = time.time() + self._gc_thread_wait
         while self._do_gc_thread:
             if time.time() > tnext:
@@ -282,16 +295,15 @@ class Cache(collections.MutableMapping):
             time.sleep(1)
 
     def collect(self, since=None):
-        '''
+        """
         Clear any item from the cache that has timed out.
-        '''
+        """
         remove_keys = []
         for key, item in self.items():
             if (
-                (item.timeout and (time.time() > self._from_timestamp(item.timeout))) or
-                (since and (self._from_timestamp(item.time_added) > since))
-            ):
-                self._debug_print('collecting : %s' % key)
+                item.timeout and (time.time() > self._from_timestamp(item.timeout))
+            ) or (since and (self._from_timestamp(item.time_added) > since)):
+                self._debug_print("collecting : %s" % key)
                 remove_keys.append(key)
 
         for key in remove_keys:
@@ -300,26 +312,29 @@ class Cache(collections.MutableMapping):
 
     # Decorators ##############################################################
     def clear_cache(self):
-        '''
+        """
         A decorator used to clear the cache everytime the function is called.
 
         For example, let's say you have a "discovery" function that stores
         data read by other functions, and those function use caching.  You want
         to use ``@c.clear_cache()`` for your main function so you don't have
         to worry about cache being stale.
-        '''
+        """
+
         def real_decorator(function):
             @wraps(function)
             def wrapper(*args, **kwargs):
                 self.clear()
                 return function(*args, **kwargs)
+
             return wrapper
+
         return real_decorator
 
     def cached(self, key=None, timeout=None):
-        '''
+        """
         A decorator used to memoize the return of a function call.
-        '''
+        """
         if timeout and not isinstance(timeout, int):
             raise ValueError("timeout can only be `int`")
         elif (key in self) or self._is_key_initialized(key):
@@ -354,16 +369,24 @@ class Cache(collections.MutableMapping):
                 try:
                     if cache_key in self and (self[cache_key] is not INIT_CACHE_VALUE):
                         result = self[cache_key]
-                        if (not result.timeout) or (result.timeout and (time.time() <= self._from_timestamp(result.timeout))):
-                            self._debug_print('cache hit : %s' % cache_key)
+                        if (not result.timeout) or (
+                            result.timeout
+                            and (time.time() <= self._from_timestamp(result.timeout))
+                        ):
+                            self._debug_print("cache hit : %s" % cache_key)
                             self._update_counter(cache_key)
                             return result.value
-                        elif result.timeout and (time.time() > self._from_timestamp(result.timeout)):
-                            self._debug_print('cache timeout: %s' % cache_key)
+                        elif result.timeout and (
+                            time.time() > self._from_timestamp(result.timeout)
+                        ):
+                            self._debug_print("cache timeout: %s" % cache_key)
                             result = CachedItem(
                                 value=function(*args, **kwargs),
-                                timeout=self._to_timestamp(time.time() + timeout) if timeout else 0,
-                                time_added=self._to_timestamp())
+                                timeout=self._to_timestamp(time.time() + timeout)
+                                if timeout
+                                else 0,
+                                time_added=self._to_timestamp(),
+                            )
                             self[cache_key] = result
                             return self[cache_key].value
                 except KeyError:  # pragma: nocover
@@ -371,14 +394,17 @@ class Cache(collections.MutableMapping):
                     # lock block.  A thread may have deleted this key, and
                     # that's fine.  We simply need to cache it again.
                     # We won't always hit this, so we disable code coverage.
-                    self._debug_print('KeyError %s' % cache_key)
+                    self._debug_print("KeyError %s" % cache_key)
 
-                self._debug_print('caching %s' % cache_key)
+                self._debug_print("caching %s" % cache_key)
 
                 result = CachedItem(
                     value=function(*args, **kwargs),
-                    timeout=self._to_timestamp(time.time() + timeout) if timeout else None,
-                    time_added=self._to_timestamp())
+                    timeout=self._to_timestamp(time.time() + timeout)
+                    if timeout
+                    else None,
+                    time_added=self._to_timestamp(),
+                )
                 self[cache_key] = result
                 return result.value
 
@@ -387,17 +413,17 @@ class Cache(collections.MutableMapping):
         return real_decorator
 
     def serialize(self, filename):
-        '''
+        """
         Serialize the cache to a filename.  This process uses ``pickle``; Do
         not use this function if you are caching something that is not
         picklable!
-        '''
-        with open(filename, 'wb') as fh:
+        """
+        with open(filename, "wb") as fh:
             pickle.dump(self._data_store, fh, -1)
 
     def deserialize(self, filename):
-        '''
+        """
         Read the serialized cache data from a file.
-        '''
-        with open(filename, 'rb') as fh:
+        """
+        with open(filename, "rb") as fh:
             self._data_store = pickle.load(fh)

@@ -12,7 +12,7 @@ def function1(argument, power=4, addition=0, division=2):
 
 
 def test_main():
-    '''use default args'''
+    """use default args"""
 
     # `function1` uses default arguments.  These calls are all equivalent, so
     # there should only be 1 item in cache.
@@ -30,5 +30,5 @@ def main():
     test_main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
