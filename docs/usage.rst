@@ -65,7 +65,7 @@ this parameter blank.  This will allow ``yamicache`` to build a key based on
 the function being called and the arguments being used.
 
 .. warning::
-    You cannot duplicate a key.  Attempts to instantiated a cached object with
+    You cannot duplicate a key.  Attempts to instantiate a cached object with
     the same key will raise ``ValueError``.
 
 ``timeout``: You can use this parameter to override the default timeout value
