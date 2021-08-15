@@ -9,20 +9,15 @@ function calls.
 """
 
 # Imports #####################################################################
-from __future__ import print_function
 import json
 import time
 import inspect
 import contextlib
 import collections
+import pickle
 from hashlib import sha224
 from functools import wraps
 from threading import Lock, Thread
-
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
 
 
 # Globals #####################################################################
