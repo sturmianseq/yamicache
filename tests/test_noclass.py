@@ -28,6 +28,7 @@ def test_main():
         my_func(2, 3)
 
     assert len(c) == 1
+    c.clear()
 
 
 def test_lists():
