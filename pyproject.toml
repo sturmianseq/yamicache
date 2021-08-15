@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "yamicache"
+version = "0.6.0"
+description = "Yet another in-memory caching package"
+authors = ["Timothy McFadden <mtik00@users.noreply.github.com>"]
+license = "MIT"
+classifiers=[
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+]
+repository = 'https://github.com/mtik00/yamicache'
+documentation = "https://yamicache.readthedocs.io"
+packages = [
+    { include = "yamicache" },
+]
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+click = "^8.0.1"
+coverage = "^5.5"
+flake8 = "^3.9.2"
+pytest-runner = "^5.3.1"
+pytest = "^6.2.4"
+PyYAML = "^5.4.1"
+Sphinx = "^4.1.2"
+twine = "^3.4.2"
+watchdog = "^2.1.3"
+selenium = "^3.141.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
