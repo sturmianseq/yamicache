@@ -77,6 +77,7 @@ def test_serialization(cache_obj):
     assert c._data_store == orig
 
     os.unlink(filepath)
+    c.clear()
 
 
 def main():
