@@ -39,6 +39,7 @@ def cache_obj():
 
 
 def test_cached(cache_obj):
+    c.clear()
     for _ in range(10):
         cache_obj.test1(8, 0)
 
